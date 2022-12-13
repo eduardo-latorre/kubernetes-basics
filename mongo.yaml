@@ -1,0 +1,53 @@
+# labels: Multiple indentifiers - Not unique
+# names: Identitfies the component - Unique
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    # Defines what PODs belong to this deployment
+    matchLabels:
+      app: mongo
+  # POD's configuration inside the Deployment component
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      # Container's configuration
+      containers:
+      - name: mongodb
+        image: mongo:5.0
+        ports:
+        - containerPort: 27017
+        # Configure environment variables
+        env: 
+        - name: MONGO_INITDB_ROOT_USERNAME
+          # Using secrets
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          # Using secrets
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    # Name of the POD to be forwarded
+    app.kubernetes.io/name: mongo
+  ports:
+    - protocol: TCP
+      port: 27017 # Same as targetPort just for k8 standard
+      targetPort: 27017 # Should SAME as containers Port!

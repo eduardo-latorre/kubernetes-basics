@@ -1,0 +1,49 @@
+Kubernetes components
+
+NODE:
+- Server where PODs are going to live 
+
+PODs: 
+- It's a set of containers
+- Abstraction over containers
+- Usually one app per POD
+- Each POD gets its own IP address
+- Can recreate if it fails and gets a new IP 
+
+SERVICE:
+- Permanent IP address
+- lifecycle of POD and Service NOT connected
+- Expose internally the POD using an DNS and IP
+- Allows to connect to others Nodes if one fails
+- It uses load balancers
+- Fowards requests to other Nodes
+
+INGRESS:
+- Allows to use a DNS to forward to SERVICE as frontdoor
+
+CONFIG-MAP:
+- External config of your application
+- Allows to set URLs externally from the Service
+- Very useful when PODs gets an update, not need to re configure
+- Must exist before deployments
+
+SECRETS:
+- Similar to CONFIG-MAP as an external config, used in PODs
+- Used to stored secrets, passwords, tokens and certificates
+- Need encryptions base64() as third party tools
+- Must exist before deployments
+
+VOLUMES:
+- It's a remote or local STORAGE 
+- For data persistence
+
+DEPLOYMENT:
+- It's for Stateless apps
+- It's the app blueprint 
+- Abstraction of PODs
+- Able to set replicas 
+- Able to scale up and down replicas
+
+STATEFULSET:
+- It's meant for DBs and Stateful apps
+- Allows to avoid data inconsistencies

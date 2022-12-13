@@ -1,0 +1,24 @@
+Kubernetes archiquecture
+
+- Each node has multiple PODs
+
+- There're 3 services required on every node
+    - Container runtime
+    - Kubelet: Interface between Node and Container to run configuration
+    - Kube Proxy: Make sure the communication works
+
+Architecture
+
+- Master Node
+    - Master processes:
+        - API Server: a Client that allows to configure through command a line or UI, it's the main Entrypoint to the kubernetes 
+        - Scheduler: See resources and go through Nodes and decide the best one to schedule - kubelet
+        - Controller manager: Detects states changes and trys to restore Node state
+        - etcd: Stores cluster state but not data from nodes, it's the cluster brain
+
+    - There're always needed more than one, because if there's no master there will be no access to the Nodes
+    - Are the most important process and use less resources
+    - If there're many Nodes then more Master Node will be needed
+    - It's easy to add them since it's only needed to install the services and add them to kubernetes cluster
+
+- Nodes

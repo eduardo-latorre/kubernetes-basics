@@ -1,0 +1,8 @@
+Minikube:
+- Meant for local and small clusters where no many resources
+- Made of Master and Worker process in one Node, Docker pre installed
+- Created a mini cluster on a VM
+
+Kubectl:
+- Is one of the three Clients (UI, API and Kubectl) that allows to interact with the cluter by API Server. 
+- It's used either in Minikube or Cloud cluster

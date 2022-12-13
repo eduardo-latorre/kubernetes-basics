@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    # Defines what PODs belong to this deployment
+    matchLabels:
+      app: webapp
+  # POD's configuration inside the Deployment component
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      # Container's configuration
+      containers:
+      - name: webapp
+        image: nanajanashia/k8s-demo-app:v1.0
+        ports:
+        - containerPort: 3000
+        # Using envs
+        env:
+        - name: USER_NAME
+          # Using secrets
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: USER_PWD
+          # Using secrets
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
+        - name: DB_URL
+          # Using ConfigMap
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort # For ingress config - NodePort ranges from 30000 - 32767
+  selector:
+    # Name of the POD to be forwarded
+    app.kubernetes.io/name: webapp
+  ports:
+    - protocol: TCP
+      port: 3000 # Same as targetPort just for k8 standard
+      targetPort: 3000 # Should SAME as containers Port!
+      nodePort: 30100
